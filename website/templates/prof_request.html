@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Professor Request</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/prof_request.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/prof_request">
+            <h2>Professor Request</h2> 
+
+            <div class="input-group">
+                <label for="professor_name">Full Name</label>
+                <input type="text" id="professor_name" name="professor_name" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <button type="submit">Send Request</button>
+        </form>
+    </div>
+</body>
+</html>

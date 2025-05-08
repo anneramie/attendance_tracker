@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/professor_details.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span>Professor Details</span>
+        </div>
+
+        <div class="professor-details">
+            <p><strong>Name:</strong> {{ professor.professor_name }}</p>
+            <p><strong>Email:</strong> {{ professor.email }}</p>
+        </div>
+        
+        <div>
+            <a href="{{ url_for('auth.generate', prof_request_id=professor.id) }}"><button class="btn">Accept</button></a>
+
+            <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button></a>
+            <a href="{{ url_for('auth.admin_request_list') }}"><button class="btn">Back</button></a>
+        </div>
+        
+</body>
+</html>

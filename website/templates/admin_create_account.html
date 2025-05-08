@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_create_account.css') }}">
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="welcome-section"><h1>WELCOME</h1></div>
+      <div class="form-section">
+        <div class="header">CREATE ACCOUNT</div>
+        <form action="/signup" method="post">
+          <div class="form-group">
+            <label for="admin-name">ADMIN NAME</label>
+            <input type="text" id="admin-name" name="admin_name" placeholder="Enter your name" value="{{ admin_name }}" required />
+          </div>
+          <div class="form-group">
+            <label for="email">EMAIL</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ email }}" required />
+          </div>
+          <div class="form-group">
+            <label for="password">PASSWORD</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required />
+          </div>
+          <button type="submit" class="btn">CREATE ACCOUNT</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

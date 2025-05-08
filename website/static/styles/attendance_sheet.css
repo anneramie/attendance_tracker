@@ -1,0 +1,134 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #dfcaa0; /* Teal background */
+}
+
+/* Container */
+.container {
+    width: 100%;
+    height:100vh;
+    margin: 20px auto;
+    background: #dfcaa0; /* Light pink */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Header Section */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fffde7; /* Teal */
+    color: black;
+    padding: 15px 20px;
+    border-radius: 12px 12px 0 0;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+.header .section-name {
+    font-size: 1.6em;
+    font-weight: bold;
+}
+
+.header .semester {
+    font-size: 1.3em;
+}
+
+/* Done Button */
+.btn {
+    background-color: #267c6b; /* Darker teal */
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background-color: #1b5d51;
+}
+
+/* Attendance Table */
+.attendance-table {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    border: 2px solid black; /* Thicker borders */
+    padding: 10px;
+    text-align: center;
+    font-size: 1em;
+}
+
+th {
+    background-color: #fffde7; /* Dark teal */
+    color: black;
+    font-weight: bold;
+}
+
+td {
+    background-color: white;
+}
+
+tr:nth-child(even) td {
+    background-color: #f0f0f0; /* Light gray for alternate rows */
+}
+
+/* Attendance Buttons */
+.attendance-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.present-btn, .absent-btn {
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.present-btn {
+    background-color: gray;
+}
+
+.present-btn:hover {
+    opacity: 0.8;
+}
+
+.absent-btn {
+    background-color: gray;
+}
+
+.absent-btn:hover {
+    opacity: 0.8;
+}
+
+/* Attendance Status Display */
+.attendance-status {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-left: 8px;
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+}

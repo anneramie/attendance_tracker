@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/section_list.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span>Section List</span>
+            <div class="add_section">
+                <a href="{{ url_for('auth.create_section') }}">
+                    <button class="btn">Create Section</button>
+                </a>
+            </div>
+        </div>
+
+        <div class="section-list">
+            {% for section in sections %}
+                <a href="{{ url_for('auth.show_attendance_sheet', section_id=section.id) }}" class="section-btn">
+                    {{ section.name }}
+                </a>
+                
+            
+            {% endfor %}
+        </div>
+        
+        
+        
+        <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button> </a>
+    </div>
+</body>
+</html>

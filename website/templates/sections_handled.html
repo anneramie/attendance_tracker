@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sections Handled</title>
+</head>
+<body>
+    <h1>Sections Handled</h1>
+    {% if sections %}
+        <ul>
+            {% for section in sections %}
+                <li>
+                    <!-- Create a button for each section that links to the attendance page -->
+                    <a href="{{ url_for('auth.show_attendance_sheet', section_id=section.id) }}">
+                        <button>{{ section.name }}</button>  <!-- Button with section name -->
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No sections available. Please request access to a section.</p>
+    {% endif %}
+</body>
+</html>

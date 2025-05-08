@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Sheet</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/attendance_sheet.css') }}">
+
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <span class="section-name">{{ section_name }}</span>
+            <span class="semester">1st Semester</span>
+            <a href="{{ url_for('auth.section_list') }}">
+                <button class="btn">Done</button>
+            </a>
+        </div>
+
+        <!-- Attendance Table -->
+        <div class="attendance-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student's Name</th>
+                        {% for day in range(1, 18) %}
+                        <th>Day {{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr data-student-id="{{ student.id }}">
+                        <td>{{ student.name }}</td>
+                        {% for day in range(1, 18) %}
+                        <td>
+                            <div class="attendance-buttons">
+                                <button class="present-btn" onclick="markPresent(this)">✔</button>
+                                <button class="absent-btn" onclick="markAbsent(this)">✖</button>
+                            </div>
+                            <span class="attendance-status">{{ attendance_data.get((student.id, day), '') }}</span>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                
+                
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function sendAttendanceUpdate(studentId, day, status, isExcused = false) {
+            fetch(`/attendance/${studentId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    attendance: [
+                        { student_id: studentId, day: day, status: status, is_excused: isExcused }
+                    ]
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data.message))
+            .catch(err => console.error('Error:', err));
+        }
+
+        function markPresent(button) {
+            const cell = button.closest("td");
+            const studentId = cell.closest("tr").getAttribute("data-student-id");
+            const day = cell.cellIndex;
+
+            cell.querySelector(".attendance-status").textContent = "P";
+            sendAttendanceUpdate(studentId, day, "P");
+        }
+
+        function markAbsent(button) {
+            const cell = button.closest("td");
+            const studentId = cell.closest("tr").getAttribute("data-student-id");
+            const day = cell.cellIndex;
+
+            const isExcused = confirm("Was the absence excused?");
+            const status = isExcused ? "E" : "A";
+            cell.querySelector(".attendance-status").textContent = status;
+            sendAttendanceUpdate(studentId, day, status, isExcused);
+        }
+
+    </script>
+    
+</body>
+</html>

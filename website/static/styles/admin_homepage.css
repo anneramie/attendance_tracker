@@ -1,0 +1,64 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: url("/static/images/bg.jpg") no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Main container */
+  .container {
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.3); /* optional: light overlay */
+    padding: 40px;
+    border-radius: 12px;
+  }
+  
+  /* Welcome message */
+  .container h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .container p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+  }
+  
+  /* Button row */
+  .button-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  /* Buttons */
+  .btn {
+    background-color: rgba(100, 100, 100, 0.75);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 200px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn:hover {
+    background-color: #004d40;
+  }
+  

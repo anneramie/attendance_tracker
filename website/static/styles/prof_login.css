@@ -1,0 +1,91 @@
+/* Basic Body Styling */
+body {
+    background-color: #dfcaa0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Login Container */
+.login-container {
+    background-color: #fffde7;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    height:50vh;
+    text-align: center;
+}
+
+/* Header */
+.login-container h2 {
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+/* Flash Messages */
+.flash-message {
+    color: white;
+    background-color: #f44336; /* Red for error */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Submit Button */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #dfcaa0;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #357abd;
+}
+
+/* Link */
+p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+p a {
+    color: #4a90e2;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,60 @@
+<!-- manage.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Section Access</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Search for a Section</h2>
+        <form method="POST" action="{{ url_for('auth.search_section') }}">
+            <div class="mb-3">
+                <input type="text" name="section_name" class="form-control" placeholder="Enter section name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mt-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% if searched %}
+            <div class="mt-4">
+                {% if sections %}
+                    <h4>Matching Sections</h4>
+                    <ul class="list-group">
+                        {% for section in sections %}
+                            <li class="list-group-item">
+                                <strong>Name:</strong> {{ section.name }}<br>
+                                <strong>ID:</strong> {{ section.id }}
+                                {% if can_request %}
+                                    <form method="POST" action="{{ url_for('auth.request_section_access') }}" class="mt-2">
+                                        <input type="hidden" name="section_ids" value="{{ section.id }}">
+                                        <button type="submit" class="btn btn-success btn-sm">Request Access</button>
+                                    </form>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="alert alert-warning mt-3">No matching section found.</div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

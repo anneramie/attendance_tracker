@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Section Attendance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/section_attendance.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="section-title">Attendance</h1>
+            <button onclick="window.location.href='sections_list.html'">BACK</button>
+        </header>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student’s Name</th>
+                    <th>Student’s ID</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody id="attendance-list"></tbody>
+        </table>
+        <a href="{{ url_for('auth.section_list') }}">
+            <button class="btn">Back</button>
+        </a>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let urlParams = new URLSearchParams(window.location.search);
+            let sectionName = urlParams.get("section");
+            document.getElementById("section-title").innerText = `Attendance - ${sectionName}`;
+            let students = JSON.parse(localStorage.getItem(sectionName) || "[]");
+            let table = document.getElementById("attendance-list");
+            students.forEach(student => {
+                let row = table.insertRow();
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>${student.id}</td>
+                    <td>
+                        <button onclick="markAttendance(this, true)">✔</button>
+                        <button onclick="markAttendance(this, false)">✖</button>
+                    </td>
+                `;
+            });
+        });
+        function markAttendance(button, present) {
+            button.parentElement.innerHTML = present ? "✔ Present" : "✖ Absent";
+        }
+    </script>
+</body>
+</html>

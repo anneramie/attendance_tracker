@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/section_list.css') }}" />
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span>Professor Requests</span>
+        </div>
+
+        <div class="section-list">
+            {% for professor_request in prof_requests %}
+                <a href="{{ url_for('auth.show_professor_details', prof_request_id=professor_request.id) }}" class="section-btn">
+                    {{ professor_request.professor_name }}
+                </a>
+            {% endfor %}
+        </div>
+        
+        
+
+        <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button></a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+</head>
+<body>
+    <div class="overlay">
+        <div class="title-bar">
+            <img src="{{ url_for('static', filename='images/at_logo.jpg') }}" alt="icon" class="icon">
+            <h1>ATTENDANCE TRACKER</h1>
+        </div>
+
+        <div class="user-options">
+            <a href="{{ url_for('auth.admin_login') }}" class="user-card">
+                <img src="{{ url_for('static', filename='images/admin.jpg') }}" alt="Admin">
+                <span>ADMIN</span>
+            </a>
+
+            <a href="{{ url_for('auth.prof_login') }}" class="user-card">
+                <img src="{{ url_for('static', filename='images/prof.jpg') }}" alt="Professor">
+                <span>PROFESSOR</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
