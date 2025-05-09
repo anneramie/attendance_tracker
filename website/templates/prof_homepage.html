@@ -2,51 +2,135 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sections Page</title>
+  <title>Professor's Homepage</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #dfcaa0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
+    /* admin_homepage.css */
+
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: url("/static/images/bg.jpg") no-repeat center center fixed;
+        background-size: cover;
     }
 
-    h1 {
-      margin-bottom: 40px;
+    .container {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        color: white;
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
     }
 
-    .button-container {
-      display: flex;
-      gap: 20px;
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 30px;
     }
 
-    .btn {
-      padding: 15px 30px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #fffde7;
-      color: black;
-      transition: background-color 0.3s ease;
+    .header img {
+        height: 50px;
+        margin-right: 15px;
     }
 
-    .btn:hover {
-      background-color: #fffde7;
+    .header h1 {
+        font-size: 2rem;
+        margin: 0;
     }
+
+    .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .centered-text {
+        margin-bottom: 30px;
+    }
+
+    .button-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .button-grid .btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #333;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .button-grid .btn:hover {
+        background-color: #45a049;
+    }
+
+    .logout {
+        text-align: center;
+        padding: 20px;
+    }
+
+    .btn-logout {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 8px;
+        background-color: #333;
+        color: white;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .btn-logout:hover {
+        background-color: #da190b;
+    }
+
+    .flash-messages {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+
+    .flash-messages ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
   </style>
 </head>
 <body>
-  <h1>Professor's Homepage</h1>
-  <div class="button-container">
-    <button class="btn" onclick="location.href='/sections-handled'">Sections Handled</button>
-    <a href="{{ url_for('auth.manage') }}"><button class="btn">Manage Sections Handled</button></a>
+  <div class="container">
+    <div class="header">
+      <img src="../images/logo.png" alt="Logo" />
+      <h1>Professor's Homepage</h1>
+    </div>
 
+    <div class="content">
+      <div class="centered-text">
+        Welcome, Professor!
+      </div>
+      <div class="button-grid">
+        <button class="btn" onclick="location.href='/sections-handled'">Sections Handled</button>
+        <a href="{{ url_for('auth.manage') }}"><button class="btn">Manage Sections Handled</button></a>
+      </div>
+    </div>
+
+    <div class="logout">
+      <button class="btn-logout" onclick="location.href='/logout'">Logout</button>
+    </div>
   </div>
-
 </body>
 </html>

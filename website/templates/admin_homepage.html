@@ -35,7 +35,7 @@
                 <a href="{{ url_for('auth.section_list') }}">
                     <button class="btn">SECTIONS LIST</button>
                 </a>
-                <a href="{{ url_for('auth.create_section') }}">
+                <a href="{{ url_for('auth.professors_page') }}">
                     <button class="btn">PROFESSORS LIST</button>
                 </a>
                 <a href="{{ url_for('auth.admin_request_list') }}">
@@ -48,7 +48,7 @@
         </div>
 
         <div class="logout">
-            <form action="{{ url_for('auth.logout') }}" method="post">
+            <form action="{{ url_for('auth.admin_logout') }}" method="post">
                 <button class="btn-logout">Log out</button>
             </form>
         </div>

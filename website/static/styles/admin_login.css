@@ -6,6 +6,7 @@ body {
     min-height: 100vh;
 }
 
+/* Title bar */
 .title-bar {
     display: flex;
     align-items: center;
@@ -15,14 +16,36 @@ body {
     color: #fff;
     font-size: 2rem;
     font-weight: bold;
-    justify-content: center;
-    height:10vh;
+    justify-content: flex-start; /* Align to the left */
+    height: 5vh;
+}
+
+/* Back button with an image */
+.back-button {
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 10px; /* Add space between button and logo */
+}
+
+.back-img {
+    width: 30px;  /* Adjust the size of the back button image */
+    height: 30px;
 }
 
 .title-bar img.icon {
     width: 80px;
     height: 80px;
 }
+
+h1 {
+    margin-left: 10px; /* Add space between logo and title */
+}
+
+
+
 /* Wrapper to center the container under the title bar */
 .page-wrapper {
     display: flex;
@@ -38,7 +61,7 @@ body {
     flex-direction: row;
     width: 80%;
     max-width: 1200px;
-    height: 80vh;
+    height: 70vh;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 

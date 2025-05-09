@@ -5,10 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Login Page</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_login.css') }}" />
+  <script>
+    // Function to go back to the previous page
+    function goBack() {
+      window.history.back();
+    }
+  </script>
 </head>
 <body>
   <!-- Title bar at top (outside container) -->
   <div class="title-bar">
+    <button onclick="goBack()" class="back-button">
+      <img src="{{ url_for('static', filename='images/back.jpg') }}" alt="Back" class="back-img">
+    </button>
     <img src="{{ url_for('static', filename='images/at_logo.jpg') }}" alt="icon" class="icon">
     <h1>ATTENDANCE TRACKER</h1>
   </div>
@@ -42,5 +51,4 @@
     </div>
   </div>
 </body>
-
 </html>

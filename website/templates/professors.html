@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Professors List</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url("/static/images/bg.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+        }
+
+        .header img {
+            height: 50px;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            padding: 30px;
+        }
+
+        #professors {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .professor-btn {
+            padding: 10px;
+            border: none;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background 0.3s;
+            text-align: left;
+        }
+
+        .professor-btn:hover {
+            background-color: #45a049;
+        }
+
+        #info-box {
+            flex-grow: 1;
+            margin-left: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        #info-box h2, #info-box p, #info-box li {
+            color: white;
+        }
+
+        .section-list {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="/static/images/at_logo.jpg" alt="Logo">
+        <h1>Professors List</h1>
+    </div>
+
+    <div class="container">
+        <div id="professors">
+            {% for prof in professors %}
+                <button class="professor-btn" onclick="fetchProfessorInfo({{ prof.id }})">{{ prof.username }}</button>
+            {% endfor %}
+        </div>
+
+        <div id="info-box" style="display: none;">
+            <h2 id="prof-name"></h2>
+            <p><strong>Email:</strong> <span id="prof-email"></span></p>
+            <div class="section-list">
+                <strong>Sections Handled:</strong>
+                <ul id="section-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fetchProfessorInfo(profId) {
+            fetch(`/professor_info/${profId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("info-box").style.display = "block";
+                    document.getElementById("prof-name").textContent = data.username;
+                    document.getElementById("prof-email").textContent = data.email;
+
+                    const sectionList = document.getElementById("section-list");
+                    sectionList.innerHTML = "";
+                    if (data.sections.length === 0) {
+                        sectionList.innerHTML = "<li>No sections assigned</li>";
+                    } else {
+                        data.sections.forEach(section => {
+                            const li = document.createElement("li");
+                            li.textContent = section;
+                            sectionList.appendChild(li);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error("Error fetching professor info:", err);
+                    alert("Failed to load professor information.");
+                });
+        }
+    </script>
+
+</body>
+</html>

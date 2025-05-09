@@ -1,64 +1,107 @@
-/* General Reset */
-* {
+/* admin_homepage.css */
+
+body {
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: url("/static/images/bg.jpg") no-repeat center center fixed;
+    background: url('../images/bg.jpg') no-repeat center center fixed;
     background-size: cover;
-    height: 100vh;
+    color: #fff;
+}
+
+.title-bar {
     display: flex;
-    justify-content: center;
     align-items: center;
-  }
-  
-  /* Main container */
-  .container {
-    text-align: center;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.3); /* optional: light overlay */
-    padding: 40px;
-    border-radius: 12px;
-  }
-  
-  /* Welcome message */
-  .container h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .container p {
-    font-size: 1.2rem;
-    margin-bottom: 40px;
-  }
-  
-  /* Button row */
-  .button-row {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  /* Buttons */
-  .btn {
-    background-color: rgba(100, 100, 100, 0.75);
-    color: white;
-    border: none;
     padding: 15px 30px;
-    font-size: 1rem;
-    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #f8f8f8;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    margin-right: 15px;
+}
+
+.back-img {
+    width: 25px;
+    height: 25px;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.title-bar h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.85);
+    margin: 50px auto;
+    max-width: 600px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.centered-text h1 {
+    font-size: 36px;
+    color: #4a2e1f;
+    margin-bottom: 10px;
+}
+
+.centered-text p {
+    font-size: 18px;
+    color: #4a2e1f;
+    margin-bottom: 30px;
+}
+
+.button-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.btn {
+    background-color: #5d5d5d;
+    color: white;
+    font-size: 16px;
     font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
     cursor: pointer;
-    min-width: 200px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .btn:hover {
-    background-color: #004d40;
-  }
-  
+    transition: background 0.3s ease;
+    width: 250px;
+}
+
+.btn:hover {
+    background-color: #3d3d3d;
+}
+
+.logout {
+    margin-top: 30px;
+}
+
+.btn-logout {
+    background-color: #c0392b;
+    color: white;
+    font-size: 14px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-logout:hover {
+    background-color: #a93226;
+}

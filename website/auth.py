@@ -12,6 +12,9 @@ import string
 from . import auth
 from flask_login import login_required, current_user
 from flask_login import login_user, logout_user
+from flask_mail import Mail, Message
+
+
 
 
 
@@ -99,13 +102,6 @@ def signup():
 
     return render_template('admin_create_account.html', email=email, admin_name=admin_name)
 
-
-
-@auth.route('/logout')
-def logout():
-    session.pop('user_id', None)
-    flash("You have been logged out.", "info")
-    return redirect(url_for('auth.login'))
 
 
 
@@ -277,6 +273,20 @@ def generate_random_password(length=10):
     characters = string.ascii_letters + string.digits  # A-Z, a-z, 0-9
     return ''.join(random.choice(characters) for _ in range(length))
 
+def send_credentials_to_professor(professor_email, username, password):
+    msg = Message(
+        subject="Your Professor Account Credentials",
+        recipients=[professor_email],
+        body=f"Hello, \n\nYour professor account has been created. \n\n"
+             f"Username: {username}\nPassword: {password}\n\nPlease log in at your earliest convenience.\n\n"
+             "Best regards,\nAdmin"
+    )
+    try:
+        Mail.send(msg)
+    except Exception as e:
+        print(f"Error sending email: {e}")
+
+
 
 @auth.route('/generate/<int:prof_request_id>')
 def generate(prof_request_id):
@@ -286,15 +296,17 @@ def generate(prof_request_id):
     raw_password = generate_random_password()
 
     new_prof = Professor(username=username)
-    new_prof.set_password(raw_password)  # ✅ Properly hash with bcrypt
+    new_prof.set_password(raw_password)  # Properly hash the password
 
     db.session.add(new_prof)
     db.session.delete(prof_request)
     db.session.commit()
 
-    return render_template('generate.html',
-                           username=username,
-                           password=raw_password)
+    # Send credentials to professor's email
+    send_credentials_to_professor(prof_request.email, username, raw_password)
+
+    return render_template('generate.html', username=username, password=raw_password)
+
 
 
 
@@ -414,13 +426,59 @@ def reject_access(request_id):
 
 @auth.route('/sections-handled')
 def sections_handled():
-    # Get the professor's sections from the database
+    # Get the professor's ID from session
     professor_id = session.get('professor_id')
     if not professor_id:
         flash("Please log in to access your sections.", "danger")
         return redirect(url_for('auth.prof_login'))
 
-    # Get all sections handled by this professor
-    sections = Section.query.join(SectionAccessRequest).filter(SectionAccessRequest.professor_id == professor_id, SectionAccessRequest.status == 'approved').all()
+    # Query all sections handled by the professor where the access request is approved
+    sections = db.session.query(Section).join(SectionAccessRequest).filter(
+        SectionAccessRequest.professor_id == professor_id, 
+        SectionAccessRequest.status == 'approved'
+    ).all()
+
+    # If no sections are found, show a message
+    if not sections:
+        flash("You have not been granted access to any sections yet.", "info")
 
     return render_template('sections_handled.html', sections=sections)
+
+
+
+
+@auth.route('/professors')
+def professors_page():
+    professors = Professor.query.all()
+    return render_template('professors.html', professors=professors)
+
+@auth.route('/professor_info/<int:professor_id>')
+def professor_info(professor_id):
+    professor = Professor.query.get_or_404(professor_id)
+
+    # Get sections they handle via access requests
+    sections = db.session.query(Section).join(SectionAccessRequest).filter(
+        SectionAccessRequest.professor_id == professor_id,
+        SectionAccessRequest.status == 'approved'
+    ).all()
+
+    # Serialize data for JSON
+    return jsonify({
+        'username': professor.username,
+        'email': getattr(professor, 'email', 'N/A'),  # Adjust if email is in another model
+        'sections': [s.name for s in sections]
+    })
+@auth.route('/admin_logout')
+@login_required  # Ensure the user is logged in before accessing this route
+def admin_logout():
+    logout_user()  # This will clear the session and log out the user
+    session.pop('user_id', None)  # Clear custom session data
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('auth.admin_login'))  # Redirect to the admin login page
+@auth.route('/prof_logout')
+@login_required  # Ensure the user is logged in before accessing this route
+def prof_logout():
+    logout_user()  # This will clear the session and log out the professor
+    session.pop('professor_id', None)  # Clear custom session data
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('auth.prof_login'))  # Redirect to the professor login page
