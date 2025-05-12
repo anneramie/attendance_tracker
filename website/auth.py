@@ -2,18 +2,13 @@ from flask import Blueprint, render_template, redirect, flash, request, url_for,
 from werkzeug.security import check_password_hash
 from website.models import Admin,Professor, Student,Section,AttendanceSheet,ProfRequest,SectionAccessRequest
 from .extensions import db, bcrypt
-import re
-import pymysql
 auth = Blueprint('auth', __name__)
 from .extensions import db
-import json
 import random
 import string
 from . import auth
-from flask_login import login_required, current_user
-from flask_login import login_user, logout_user
-from flask_mail import Message
-from .__init__ import mail
+
+
 
 
 
@@ -451,37 +446,6 @@ def professor_info(professor_id):
 
 
 
-@auth.route('/view_attendance/<int:section_id>', methods=['GET'])
-def view_final_attendance(section_id):
-    # Get all students in the section
-    students = Student.query.filter_by(section_id=section_id).all()
-
-    # Load attendance records for the section
-    attendance_records = AttendanceSheet.query.join(Student).filter(Student.section_id == section_id).all()
-
-    # Build a nested dict: {student_id: {day: status}}
-    attendance_data = {}
-    all_days = set()
-
-    for record in attendance_records:
-        sid = record.student_id
-        day = record.day
-        status = record.status
-
-        all_days.add(day)
-        if sid not in attendance_data:
-            attendance_data[sid] = {}
-        attendance_data[sid][day] = status
-
-    sorted_days = sorted(all_days)
-
-    return render_template(
-        'view_attendance.html',
-        students=students,
-        attendance_data=attendance_data,
-        days=sorted_days,
-        section_id=section_id
-    )
 @auth.route('/admin_logout', methods=['GET', 'POST'])
 def admin_logout():
     if request.method == 'POST':
@@ -546,17 +510,38 @@ def generate(prof_request_id):
                            password=raw_password,
                            professor_name=prof_request.professor_name, 
                            email=prof_request.email)
-@auth.route('/test-email')
-def test_email():
-    msg = Message(
-        'Test Email',  # Subject of the email
-        recipients=['pandinoanne7@gmail.com'],  # Replace with your email to test
-        sender='0323-2027@lspu.edu.ph'  # Add your Gmail address here
-    )
-    msg.body = 'This is a test email sent from Flask.'  # Body of the email
-    try:
-        mail.send(msg)  # Attempt to send the email
-        return 'Test email sent successfully!'  # If successful, return this message
-    except Exception as e:
-        return f"Error sending test email: {e}"  # If there is an error, return the error message
 
+
+
+@auth.route('/view_attendance/<int:section_id>', methods=['GET'])
+def view_final_attendance(section_id):
+    # Get all students in the section
+    students = Student.query.filter_by(section_id=section_id).all()
+
+    # Load attendance records for the section
+    attendance_records = AttendanceSheet.query.join(Student).filter(Student.section_id == section_id).all()
+
+    # Build a nested dict: {student_id: {day: status}}
+    attendance_data = {}
+    all_days = set()
+
+    for record in attendance_records:
+        sid = record.student_id
+        day = record.day
+        status = record.status
+
+        all_days.add(day)
+        if sid not in attendance_data:
+            attendance_data[sid] = {}
+        attendance_data[sid][day] = status
+
+    sorted_days = sorted(all_days)
+
+    return render_template(
+        'view_attendance.html',
+        students=students,
+        attendance_data=attendance_data,
+        days=sorted_days,
+        section_id=section_id
+    )
+    
