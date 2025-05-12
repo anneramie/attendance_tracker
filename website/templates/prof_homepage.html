@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Professor's Homepage</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/professor_homepage.css') }}" />
   <style>
-    /* admin_homepage.css */
-
+    /* Common Styles */
     body, html {
         height: 100%;
         margin: 0;
@@ -20,81 +21,27 @@
         min-height: 100vh;
         color: white;
         text-align: center;
-        font-size: 2rem;
-        font-weight: bold;
     }
 
-    .header {
+    .title-bar {
         display: flex;
         align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, 0.5);
+        gap: 10px;
         padding: 30px;
-    }
-
-    .header img {
-        height: 50px;
-        margin-right: 15px;
-    }
-
-    .header h1 {
-        font-size: 2rem;
-        margin: 0;
-    }
-
-    .content {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .centered-text {
-        margin-bottom: 30px;
-    }
-
-    .button-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .button-grid .btn {
-        padding: 12px 24px;
+        background: #00000033;
+        color: #fff;
         font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        background-color: #333;
-        color: white;
-        cursor: pointer;
-        transition: background 0.3s;
+        font-weight: bold;
+        justify-content: left;
+        height: 5vh;
     }
 
-    .button-grid .btn:hover {
-        background-color: #45a049;
+    .title-bar img.icon {
+        width: 40px;
+        height: 40px;
     }
 
-    .logout {
-        text-align: center;
-        padding: 20px;
-    }
-
-    .btn-logout {
-        padding: 10px 20px;
-        font-size: 0.9rem;
-        border: none;
-        border-radius: 8px;
-        background-color: #333;
-        color: white;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-
-    .btn-logout:hover {
-        background-color: #da190b;
-    }
-
+    /* Flash Messages */
     .flash-messages {
         position: absolute;
         top: 10px;
@@ -109,27 +56,131 @@
         margin: 0;
     }
 
+    /* White content container */
+    .content-container {
+        display: flex;
+        flex-direction: row; /* Text and buttons side by side */
+        align-items: center;
+        justify-content: space-between;
+        padding: 40px 50px;
+        text-align: left;
+        background-color: rgba(255, 255, 255, 0.95);
+        margin: 60px auto;
+        max-width: 900px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        color: #333;
+        height: 50vh;
+    }
+
+    /* Left text container */
+    .centered-text {
+        flex: 1;
+        padding-right: 40px;
+    }
+
+    .centered-text h1 {
+        font-size: 36px;
+        margin-bottom: 10px;
+        color: #4a2e1f;
+    }
+
+    .centered-text p {
+        font-size: 18px;
+        margin-bottom: 30px;
+        color: #4a2e1f;
+    }
+
+    /* Right button container */
+    .button-grid {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end; /* Align buttons to the right */
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .btn {
+        background-color: #5d5d5d;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        width: 250px;
+    }
+
+    .btn:hover {
+        background-color: #3d3d3d;
+    }
+
+    /* Floating logout button in bottom-right corner */
+    .btn-logout {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: #c0392b;
+        color: white;
+        font-size: 14px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        z-index: 1000;
+    }
+
+    .btn-logout:hover {
+        background-color: #a93226;
+    }
+
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <img src="../images/logo.png" alt="Logo" />
+    <div class="title-bar">
+      <img src="{{ url_for('static', filename='images/at_logo.jpg') }}" alt="icon" class="icon" />
       <h1>Professor's Homepage</h1>
     </div>
 
-    <div class="content">
-      <div class="centered-text">
-        Welcome, Professor!
-      </div>
-      <div class="button-grid">
-        <button class="btn" onclick="location.href='/sections-handled'">Sections Handled</button>
-        <a href="{{ url_for('auth.manage') }}"><button class="btn">Manage Sections Handled</button></a>
-      </div>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- White centered content -->
+    <div class="content-container">
+        <div class="centered-text">
+            <h1>Good Day, Professor!</h1>
+            <p>We’re glad to have you here. <br> Welcome to your dashboard!</p>
+        </div>
+
+        <div class="button-grid">
+            <a href="{{ url_for('auth.sections_handled') }}">
+                <button class="btn">Sections Handled</button>
+            </a>
+            <a href="{{ url_for('auth.manage') }}">
+                <button class="btn">Manage Sections</button>
+            </a>
+        </div>
     </div>
 
+    <!-- Logout button -->
     <div class="logout">
-      <button class="btn-logout" onclick="location.href='/logout'">Logout</button>
+        <form action="{{ url_for('auth.professor_logout') }}" method="post">
+            <button class="btn-logout">Log out</button>
+        </form>
     </div>
   </div>
 </body>

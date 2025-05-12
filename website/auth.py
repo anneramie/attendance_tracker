@@ -12,7 +12,8 @@ import string
 from . import auth
 from flask_login import login_required, current_user
 from flask_login import login_user, logout_user
-from flask_mail import Mail, Message
+from flask_mail import Message
+from .__init__ import mail
 
 
 
@@ -33,7 +34,7 @@ def home():
     
     return render_template('index.html')
 
-@auth.route('/admin_login', methods=['GET', 'POST'])  # Login route
+@auth.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
     if request.method == 'POST':
         email = request.form.get('email').strip()
@@ -43,17 +44,15 @@ def admin_login():
 
         if existing_user and bcrypt.check_password_hash(existing_user.password, password):
             session.permanent = True  
-            session['user_id'] = existing_user.id  
+            session['user_id'] = existing_user.id  # Set admin ID in the session
+            session.pop('professor_id', None)  # Clear the professor session if it's set
             flash("Login successful!", "success")
 
-            # ✅ Redirect to the correct admin homepage route
-            return redirect(url_for('views.admin_homepage'))
-
+            return redirect(url_for('views.admin_homepage'))  # Correct redirection to admin homepage
 
         flash('Invalid email or password.', 'danger')
 
     return render_template('admin_login.html')  # Render login page
-
 
 
 
@@ -278,34 +277,16 @@ def send_credentials_to_professor(professor_email, username, password):
         subject="Your Professor Account Credentials",
         recipients=[professor_email],
         body=f"Hello, \n\nYour professor account has been created. \n\n"
-             f"Username: {username}\nPassword: {password}\n\nPlease log in at your earliest convenience.\n\n"
-             "Best regards,\nAdmin"
+            f"Username: {username}\nPassword: {password}\n\nPlease log in at your earliest convenience.\n\n"
+            "Best regards,\nAdmin"
     )
     try:
-        Mail.send(msg)
+        mail.send(msg)
     except Exception as e:
         print(f"Error sending email: {e}")
 
 
 
-@auth.route('/generate/<int:prof_request_id>')
-def generate(prof_request_id):
-    prof_request = ProfRequest.query.get_or_404(prof_request_id)
-
-    username = generate_username(prof_request.professor_name)
-    raw_password = generate_random_password()
-
-    new_prof = Professor(username=username)
-    new_prof.set_password(raw_password)  # Properly hash the password
-
-    db.session.add(new_prof)
-    db.session.delete(prof_request)
-    db.session.commit()
-
-    # Send credentials to professor's email
-    send_credentials_to_professor(prof_request.email, username, raw_password)
-
-    return render_template('generate.html', username=username, password=raw_password)
 
 
 
@@ -313,23 +294,22 @@ def generate(prof_request_id):
 @auth.route('/prof_login', methods=['GET', 'POST'])
 def prof_login():
     if request.method == 'POST':
-        # Grab the username and password from the form
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
 
-        # Look up the professor by username
         professor = Professor.query.filter_by(username=username).first()
 
-        # Check the password using the check_password method
         if professor and professor.check_password(password):
-            session.permanent = True  
-            session['professor_id'] = professor.id
+            session.permanent = True
+            session['professor_id'] = professor.id  # Set professor ID in the session
+            session.pop('user_id', None)  # Clear the admin session if it's set
             flash("Login successful!", "success")
-            return redirect(url_for('views.prof_homepage'))
+            return redirect(url_for('views.prof_homepage'))  # Correct redirection to professor homepage
 
         flash('Invalid username or password.', 'danger')
 
-    return render_template('prof_login.html')
+    return render_template('prof_login.html')  # Render login page
+
 
 @auth.route('/add', methods=['GET'])
 def manage():
@@ -468,17 +448,115 @@ def professor_info(professor_id):
         'email': getattr(professor, 'email', 'N/A'),  # Adjust if email is in another model
         'sections': [s.name for s in sections]
     })
-@auth.route('/admin_logout')
-@login_required  # Ensure the user is logged in before accessing this route
+
+
+
+@auth.route('/view_attendance/<int:section_id>', methods=['GET'])
+def view_final_attendance(section_id):
+    # Get all students in the section
+    students = Student.query.filter_by(section_id=section_id).all()
+
+    # Load attendance records for the section
+    attendance_records = AttendanceSheet.query.join(Student).filter(Student.section_id == section_id).all()
+
+    # Build a nested dict: {student_id: {day: status}}
+    attendance_data = {}
+    all_days = set()
+
+    for record in attendance_records:
+        sid = record.student_id
+        day = record.day
+        status = record.status
+
+        all_days.add(day)
+        if sid not in attendance_data:
+            attendance_data[sid] = {}
+        attendance_data[sid][day] = status
+
+    sorted_days = sorted(all_days)
+
+    return render_template(
+        'view_attendance.html',
+        students=students,
+        attendance_data=attendance_data,
+        days=sorted_days,
+        section_id=section_id
+    )
+@auth.route('/admin_logout', methods=['GET', 'POST'])
 def admin_logout():
-    logout_user()  # This will clear the session and log out the user
-    session.pop('user_id', None)  # Clear custom session data
-    flash('You have been logged out.', 'success')
-    return redirect(url_for('auth.admin_login'))  # Redirect to the admin login page
-@auth.route('/prof_logout')
-@login_required  # Ensure the user is logged in before accessing this route
-def prof_logout():
-    logout_user()  # This will clear the session and log out the professor
-    session.pop('professor_id', None)  # Clear custom session data
-    flash('You have been logged out.', 'success')
-    return redirect(url_for('auth.prof_login'))  # Redirect to the professor login page
+    if request.method == 'POST':
+        session.pop('user_id', None)  # Clear admin session
+        flash('You have been logged out as an admin.', 'info')
+        return redirect(url_for('auth.admin_login'))  # Redirect to admin login page
+    return render_template('logout.html')  # Just a placeholder for GET requests
+
+@auth.route('/professor_logout', methods=['GET', 'POST'])
+def professor_logout():
+    if request.method == 'POST':
+        session.pop('professor_id', None)  # Clear professor session
+        flash('You have been logged out as a professor.', 'info')
+        return redirect(url_for('auth.prof_login'))  # Redirect to professor login page
+    return render_template('logout.html')  # Just a placeholder for GET requests
+from flask_mail import Message
+
+def send_credentials_to_professor(email, username, password):
+    msg = Message(
+        subject="Your Professor Account Credentials",
+        recipients=[email],
+        body=f"Hello, \n\nYour professor account has been created. \n\n"
+             f"Username: {username}\nPassword: {password}\n\n"
+             "Please log in at your earliest convenience.\n\n"
+             "Best regards,\nAdmin"
+    )
+    try:
+        mail.send(msg)  # Try sending the email
+        print(f"Email sent to {email}")  # Log that the email was sent
+    except Exception as e:
+        print(f"Error sending email to {email}: {e}")  # Log the error if something goes wrong
+
+
+
+@auth.route('/generate/<int:prof_request_id>')
+def generate(prof_request_id):
+    prof_request = ProfRequest.query.get_or_404(prof_request_id)
+
+    # Use the professor's name and email directly from the ProfRequest table
+    username = generate_username(prof_request.professor_name)
+    raw_password = generate_random_password()
+
+    # Create a new professor with the generated username
+    new_prof = Professor(username=username)
+    new_prof.set_password(raw_password)  # Properly hash the password
+
+    # Add the new professor to the database
+    db.session.add(new_prof)
+
+    # Delete the prof_request entry since it has been processed
+    db.session.delete(prof_request)
+
+    # Commit the transaction to save changes
+    db.session.commit()
+
+    # Send the credentials to the professor's email after saving to the database
+    send_credentials_to_professor(prof_request.email, username, raw_password)
+
+    # Render the template to show the generated credentials
+    return render_template('generate.html', 
+                           username=username, 
+                           password=raw_password,
+                           professor_name=prof_request.professor_name, 
+                           email=prof_request.email)
+@auth.route('/test-email')
+def test_email():
+    msg = Message(
+        'Test Email',  # Subject of the email
+        recipients=['pandinoanne7@gmail.com'],  # Replace with your email to test
+        sender='0323-2027@lspu.edu.ph'  # Add your Gmail address here
+    )
+    msg.body = 'This is a test email sent from Flask.'  # Body of the email
+    try:
+        mail.send(msg)  # Attempt to send the email
+        return 'Test email sent successfully!'  # If successful, return this message
+    except Exception as e:
+        return f"Error sending test email: {e}"  # If there is an error, return the error message
+

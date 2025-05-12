@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Section List</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/section_list.css') }}" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Section List</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/section_list.css') }}" />
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <span>Section List</span>
-            <div class="add_section">
-                <a href="{{ url_for('auth.create_section') }}">
-                    <button class="btn">Create Section</button>
-                </a>
-            </div>
-        </div>
+  <div class="title-bar">
+    <img src="{{ url_for('static', filename='images/at_logo.jpg') }}" alt="icon" class="icon" />
+    <h1>ATTENDANCE TRACKER</h1>
+  </div>
 
-        <div class="section-list">
-            {% for section in sections %}
-                <a href="{{ url_for('auth.show_attendance_sheet', section_id=section.id) }}" class="section-btn">
-                    {{ section.name }}
-                </a>
-                
-            
-            {% endfor %}
-        </div>
-        
-        
-        
-        <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button> </a>
+  <div class="overlay">
+    <div class="button-bar">
+      <a href="javascript:window.history.back();">
+        <img src="{{ url_for('static', filename='images/back.jpg') }}" alt="Back" class="back-icon" />
+      </a>
+      <a href="{{ url_for('auth.create_section') }}">
+        <img src="{{ url_for('static', filename='images/add.jpg') }}" alt="Create Section" class="create-icon" />
+      </a>
     </div>
+
+   
+
+    <div class="section-list">
+      {% for section in sections %}
+        <a href="{{ url_for('auth.view_final_attendance', section_id=section.id) }}" class="section-btn">
+          {{ section.name }}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
 </body>
 </html>

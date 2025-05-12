@@ -13,9 +13,10 @@
         <div class="header">
             <span class="section-name">{{ section_name }}</span>
             <span class="semester">1st Semester</span>
-            <a href="{{ url_for('auth.section_list') }}">
-                <button class="btn">Done</button>
-            </a>
+            <div class="done-button-container">
+                <a href="{{ url_for('auth.sections_handled') }}" class="btn">Done</a>
+            </div>
+
         </div>
 
         <!-- Attendance Table -->

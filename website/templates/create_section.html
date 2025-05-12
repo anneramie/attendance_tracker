@@ -9,33 +9,39 @@
 </head>
 <body>
 
-<div class="container">
-    <h2>Create Section</h2>
+<div class="overlay">
 
-    <label>Section’s Name:</label>
-    <input type="text" id="sectionName" placeholder="Enter Section Name">
+    <div class="title-bar">
+            <img src="{{ url_for('static', filename='images/at_logo.jpg') }}" alt="icon" class="icon">
+            <h1>ATTENDANCE TRACKER</h1>
+    </div>
+    <div class="container">
 
-    <h3>Enroll Student</h3>
-    <input type="text" id="studentName" placeholder="Enter Student Name">
-    <input type="text" id="studentID" placeholder="Enter Student ID Number">
-    <button class="btn" onclick="enrollStudent()">Enroll</button>
+        <label>Section’s Name:</label>
+        <input type="text" id="sectionName" placeholder="Enter Section Name">
 
-    <h3>Students List</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Student's Name</th>
-                <th>Student's ID</th>
-            </tr>
-        </thead>
-        <tbody id="studentTable"></tbody>
-    </table>
+        <h3>Enroll Student</h3>
+        <input type="text" id="studentName" placeholder="Enter Student Name">
+        <input type="text" id="studentID" placeholder="Enter Student ID Number">
+        <button class="btn" onclick="enrollStudent()">Enroll</button>
 
-    <button class="btn" onclick="submitSection()">Add Section</button>
-    <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button> </a>
-    <a href="{{ url_for('auth.section_list') }}">
-        <button class="btn">Back</button>
-    </a>
+        <h3>Students List</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student's Name</th>
+                    <th>Student's ID</th>
+                </tr>
+            </thead>
+            <tbody id="studentTable"></tbody>
+        </table>
+
+        <button class="btn" onclick="submitSection()">Add Section</button>
+        <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button> </a>
+        <a href="{{ url_for('auth.section_list') }}">
+            <button class="btn">Back</button>
+        </a>
+    </div>
 </div>
 
 <script>

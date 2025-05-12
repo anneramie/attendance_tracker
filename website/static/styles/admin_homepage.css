@@ -1,73 +1,71 @@
-/* admin_homepage.css */
-
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: url('../images/bg.jpg') no-repeat center center fixed;
+    font-family: Arial, sans-serif;
+    background: url("/static/images/bg.jpg") no-repeat center center fixed;
     background-size: cover;
-    color: #fff;
+    min-height: 100vh;
 }
 
 .title-bar {
     display: flex;
     align-items: center;
-    padding: 15px 30px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #f8f8f8;
+    gap: 10px;
+    padding: 30px;
+    background: #00000033;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    justify-content: left;
+    height: 5vh;
 }
 
-.back-button {
-    background: none;
-    border: none;
-    margin-right: 15px;
-}
-
-.back-img {
-    width: 25px;
-    height: 25px;
-}
-
-.icon {
+.title-bar img.icon {
     width: 40px;
     height: 40px;
-    margin-right: 10px;
 }
 
-.title-bar h1 {
-    font-size: 24px;
-    margin: 0;
-}
-
+/* White content container with horizontal layout */
 .content-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* layout text and buttons side by side */
     align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    text-align: center;
-    background-color: rgba(255, 255, 255, 0.85);
-    margin: 50px auto;
-    max-width: 600px;
+    justify-content: space-between;
+    padding: 40px 50px;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.95);
+    margin: 60px auto;
+    max-width: 900px;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    color: #333;
+    height: 50vh;
+}
+
+/* Left text container */
+.centered-text {
+    flex: 1;
+    padding-right: 40px;
 }
 
 .centered-text h1 {
     font-size: 36px;
-    color: #4a2e1f;
     margin-bottom: 10px;
+    color: #4a2e1f;
 }
 
 .centered-text p {
     font-size: 18px;
-    color: #4a2e1f;
     margin-bottom: 30px;
+    color: #4a2e1f;
 }
 
+/* Right button container */
 .button-grid {
     display: flex;
     flex-direction: column;
+    align-items: flex-end; /* align buttons to the right */
     gap: 15px;
+    margin-top: 10px;
 }
 
 .btn {
@@ -91,7 +89,13 @@ body {
     margin-top: 30px;
 }
 
+/* Remove .logout block – no longer needed */
+
+/* Floating logout button in bottom-right corner */
 .btn-logout {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
     background-color: #c0392b;
     color: white;
     font-size: 14px;
@@ -100,6 +104,7 @@ body {
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.3s ease;
+    z-index: 1000;
 }
 
 .btn-logout:hover {
