@@ -2,27 +2,119 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credentials Generated</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/professor_details.css') }}">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url("/static/images/bg.jpg") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 25px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        /* Title Bar */
+        .title-bar {
+            display: flex;
+            height: 10vh;
+            align-items: center;
+            gap: 10px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            justify-content: space-between;
+        }
+
+        .title-bar i.icon {
+            font-size: 40px;
+            color: white;
+        }
+
+        .title-bar h1 {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        /* Professor Details */
+        .header {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .professor-details p {
+            margin: 12px 0;
+            font-size: 1.05rem;
+        }
+
+        .warning {
+            color: #ff4d4d;
+            font-weight: bold;
+        }
+
+        /* Buttons */
+        .btn-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn-group a button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 5px;
+        }
+
+        .btn-group a button:hover {
+            background-color: #555;
+        }
+
+    </style>
 </head>
 <body>
+    <!-- Title Bar with Logo and Icons -->
+    <div class="title-bar">
+        <i class="fa-solid fa-chalkboard-teacher icon"></i> <!-- Logo -->
+        <h1>Professor Account Created</h1>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <span>Professor Account Created</span>
-        </div>
+        <!-- Professor Details -->
+        <div class="header">Professor Account Created</div>
 
         <div class="professor-details">
             <p><strong>Professor Name:</strong> {{ professor_name }}</p>
             <p><strong>Email:</strong> {{ email }}</p>
             <p><strong>Username:</strong> {{ username }}</p>
             <p><strong>Temporary Password:</strong> {{ password }}</p>
-            <p style="color: red;">Please send these credentials to the professor manually.</p>
+            <p class="warning">Please send these credentials to the professor manually.</p>
         </div>
 
-        <div>
-            <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button></a>
-            <a href="{{ url_for('auth.admin_request_list') }}"><button class="btn">Back to Requests</button></a>
+        <!-- Buttons -->
+        <div class="btn-group">
+            <a href="{{ url_for('views.admin_homepage') }}"><button>Home</button></a>
+            <a href="{{ url_for('auth.admin_request_list') }}"><button>Back to Requests</button></a>
         </div>
     </div>
+
+    <!-- FontAwesome CDN for Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
 </body>
 </html>

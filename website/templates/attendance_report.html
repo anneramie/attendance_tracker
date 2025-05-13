@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Report</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Attendance Report for Section {{ section_id }}</h1>
+
+        {% if attendance_data %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Day</th>
+                        <th>Status</th>
+                        <th>Professor Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_data %}
+                        <tr>
+                            <td>{{ record.student_name }}</td>
+                            <td>{{ record.day }}</td>
+                            <td>{{ record.status }}</td>
+                            <td>{{ record.professor_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No attendance records found for this section.</p>
+        {% endif %}
+    </div>
+
+    <a href="{{ url_for('auth.sections_handled') }}">Back to Sections</a>
+</body>
+</html>

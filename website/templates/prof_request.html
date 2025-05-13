@@ -1,35 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Professor Request</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/prof_request.css') }}">
-</head>
-<body>
-    <div class="form-container">
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <form method="POST" action="/prof_request">
-            <h2>Professor Request</h2> 
-
-            <div class="input-group">
-                <label for="professor_name">Full Name</label>
-                <input type="text" id="professor_name" name="professor_name" required>
-            </div>
-
-            <div class="input-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-
-            <button type="submit">Send Request</button>
-        </form>
+  </head>
+  <body>
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <button class="back-button" onclick="history.back()">
+        <i class="fa-solid fa-circle-left"></i>
+      </button>
+      <i class="fa-solid fa-clipboard-user icon"></i>
+      <h1>Professor Request</h1>
     </div>
-</body>
+
+    <!-- Page Wrapper -->
+    <div class="page-wrapper">
+      <div class="container">
+        
+        <!-- LEFT SIDE: WELCOME SECTION -->
+        <div class="welcome-section">
+          <h1><span>NEW</span><br /><span>HERE?</span></h1>
+          <p>Track attendance effortlessly.</p>
+          <p>Sign up now!</p>
+          <a href="{{ url_for('auth.signup') }}" class="btn">Sign up</a>
+        </div>
+
+        <!-- RIGHT SIDE: PROFESSOR REQUEST FORM -->
+        <div class="request-section">
+          <div class="form-container">
+            <h2>Professor Request</h2>
+            <form method="POST" action="/prof_request">
+              <div class="form-group">
+                <label for="professor_name">Full Name</label>
+                <input type="text" id="professor_name" name="professor_name" placeholder="Enter your full name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+              </div>
+
+              <button type="submit" class="btn">Send Request</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
 </html>

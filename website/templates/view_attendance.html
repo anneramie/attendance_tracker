@@ -3,40 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>View Attendance</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <style>
-       /* Reset and Base */
         * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-        width: 100vw;
-        height: 100vh;
-        font-family: 'Segoe UI', sans-serif;
-        background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
-        background-size: cover;
-        display: flex;
-        flex-direction: column;
+            width: 100vw;
+            min-height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
         }
 
         .title-bar {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 30px;
-        background: rgba(0, 0, 0, 0.2);
-        color: #fff;
-        font-size: 1rem;
-        font-weight: bold;
-        justify-content: left;
-        height: 15vh;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            justify-content: space-between;
+            height: 15vh;
         }
 
         .title-bar h1 {
             margin: 0;
             font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .title-bar .buttons {
@@ -53,7 +58,6 @@
             cursor: pointer;
             font-weight: bold;
             border-radius: 5px;
-           
         }
 
         .title-bar .buttons button:hover {
@@ -61,10 +65,10 @@
         }
 
         table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-        background-color: white;  /* Make the entire table white */
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
         }
 
         th, td {
@@ -74,60 +78,79 @@
         }
 
         th {
-            background-color: #f2f2f2; /* Keep header slightly gray for contrast */
+            background-color: #f2f2f2;
         }
 
         td.present {
-            background-color: #d4edda; /* Green for present */
+            background-color: #d4edda;
         }
 
         td.absent {
-            background-color: #f8d7da; /* Red for absent */
+            background-color: #f8d7da;
         }
 
         td.excused {
-            background-color: #fff3cd; /* Yellow for excused */
+            background-color: #fff3cd;
         }
-
 
         .legend {
             margin: 15px;
             font-weight: bold;
         }
+
+        .professor-title {
+            margin: 40px 0 10px 0;
+            font-size: 1.2em;
+            color: #004080;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-left: 5px solid #004080;
+        }
     </style>
 </head>
 <body>
     <div class="title-bar">
-        <h1>Section Attendance - {{ section_id }}</h1>
+        <h1><i class="fa-solid fa-table-list"></i> Section Attendance - {{ section_id }}</h1>
         <div class="buttons">
-            <button onclick="history.back()">Back</button>
-            <button onclick="location.href='{{ url_for('views.admin_homepage') }}'">Home</button>
+            <button onclick="history.back()"><i class="fa-solid fa-circle-left"></i> Back</button>
+            <button onclick="location.href='{{ url_for('views.admin_homepage') }}'"><i class="fa-solid fa-house"></i> Home</button>
         </div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Student Name</th>
-                {% for day in days %}
-                    <th>{{ day }}</th>
-                {% endfor %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for student in students %}
-                <tr>
-                    <td>{{ student.name }}</td>
-                    {% for day in days %}
-                        {% set status = attendance_data[student.id].get(day, '-') %}
-                        <td class="{% if status == 'P' %}present{% elif status == 'A' %}absent{% elif status == 'E' %}excused{% endif %}">
-                            {{ status }}
-                        </td>
+    {% if attendance_by_prof %}
+        {% for prof_name, attendance_data in attendance_by_prof.items() %}
+            <div class="professor-title">Professor: {{ prof_name }}</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        {% for day in all_days %}
+                            <th>{{ day }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.name }}</td>
+                            {% for day in all_days %}
+                                {% set status = attendance_data.get(student.id, {}).get(day, '-') %}
+                                <td class="{% if status == 'P' %}present{% elif status == 'A' %}absent{% elif status == 'E' %}excused{% endif %}">
+                                    {{ status }}
+                                </td>
+                            {% endfor %}
+                        </tr>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <p>No attendance data available for this section.</p>
+    {% endif %}
+
+    <form action="{{ url_for('auth.download_attendance', section_id=section_id) }}" method="get" style="margin: 20px;">
+        <button type="submit" class="btn btn-primary">Download PDF</button>
+    </form>
 
     <p class="legend">Legend: P = Present, A = Absent, E = Excused</p>
 </body>

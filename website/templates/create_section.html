@@ -4,95 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Section</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/create_section.css') }}" />
-    
 </head>
 <body>
-
-<div class="overlay">
-
     <div class="title-bar">
-            <img src="{{ url_for('static', filename='images/at_logo.jpg') }}" alt="icon" class="icon">
-            <h1>ATTENDANCE TRACKER</h1>
+        <div class="title-left">
+            <i class="fa-solid fa-clipboard-user icon"></i>
+            <h1>CREATE SECTION</h1>
+        </div>
+
+        <div class="button-group">
+            <a href="{{ url_for('views.admin_homepage') }}">
+              <button class="btn icon-only">
+                <i class="fa-solid fa-house"></i>
+              </button>
+            </a>
+            <a href="{{ url_for('auth.section_list') }}">
+              <button class="btn icon-only">
+                <i class="fa-solid fa-circle-left"></i>
+              </button>
+            </a>
+        </div>
     </div>
-    <div class="container">
 
-        <label>Section’s Name:</label>
-        <input type="text" id="sectionName" placeholder="Enter Section Name">
+    <div class="overlay">
+        <div class="container">
+            <label>Section’s Name:</label>
+            <input type="text" id="sectionName" placeholder="Enter Section Name">
 
-        <h3>Enroll Student</h3>
-        <input type="text" id="studentName" placeholder="Enter Student Name">
-        <input type="text" id="studentID" placeholder="Enter Student ID Number">
-        <button class="btn" onclick="enrollStudent()">Enroll</button>
+            <h3>Enroll Student</h3>
+            <input type="text" id="studentName" placeholder="Enter Student Name">
+            <input type="text" id="studentID" placeholder="Enter Student ID Number">
+            <button class="btn" onclick="enrollStudent()">
+              <i class="fa-solid fa-user-plus"></i> Enroll
+            </button>
 
-        <h3>Students List</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Student's Name</th>
-                    <th>Student's ID</th>
-                </tr>
-            </thead>
-            <tbody id="studentTable"></tbody>
-        </table>
-
-        <button class="btn" onclick="submitSection()">Add Section</button>
-        <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button> </a>
-        <a href="{{ url_for('auth.section_list') }}">
-            <button class="btn">Back</button>
-        </a>
+            <h3>Students List</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student's Name</th>
+                        <th>Student's ID</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTable"></tbody>
+            </table>
+            <button class="btn" onclick="submitSection()">
+                <i class="fa-solid fa-plus"></i> Add Section
+            </button>
+        </div>
     </div>
-</div>
 
-<script>
-    let students = [];
+    <script>
+        let students = [];
 
-    function enrollStudent() {
-        let name = document.getElementById('studentName').value;
-        let id = document.getElementById('studentID').value;
+        function enrollStudent() {
+            let name = document.getElementById('studentName').value;
+            let id = document.getElementById('studentID').value;
 
-        if (name === '' || id === '') {
-            alert("Please enter both student name and ID!");
-            return;
-        }
-
-        students.push({ name, id });
-
-        let table = document.getElementById('studentTable');
-        let row = table.insertRow();
-        row.insertCell(0).textContent = name;
-        row.insertCell(1).textContent = id;
-
-        document.getElementById('studentName').value = '';
-        document.getElementById('studentID').value = '';
-    }
-
-    function submitSection() {
-        let sectionName = document.getElementById('sectionName').value;
-
-        if (sectionName === '') {
-            alert("Please enter a section name!");
-            return;
-        }
-
-        fetch('http://127.0.0.1:5000/create_section', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name: sectionName, students }) // Change "sectionName" to "name"
-
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            if (data.success) {
-                document.getElementById('sectionName').value = '';
-                document.getElementById('studentTable').innerHTML = '';
-                students = [];
+            if (name === '' || id === '') {
+                alert("Please enter both student name and ID!");
+                return;
             }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-</script>
 
+            students.push({ name, id });
+
+            let table = document.getElementById('studentTable');
+            let row = table.insertRow();
+            row.insertCell(0).textContent = name;
+            row.insertCell(1).textContent = id;
+
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentID').value = '';
+        }
+
+        function submitSection() {
+            let sectionName = document.getElementById('sectionName').value;
+
+            if (sectionName === '') {
+                alert("Please enter a section name!");
+                return;
+            }
+
+            fetch('http://127.0.0.1:5000/create_section', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: sectionName, students })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    document.getElementById('sectionName').value = '';
+                    document.getElementById('studentTable').innerHTML = '';
+                    students = [];
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>

@@ -1,172 +1,190 @@
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: url("/static/images/bg.jpg") no-repeat center center fixed;
-    background-size: cover;
-    min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url("/static/images/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
 }
 
+/* Title bar fix */
 .title-bar {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 30px;
-    background: rgba(0, 0, 0, 0.2);
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    justify-content: center;
-    height:5vh;
+  display: flex;
+  justify-content: flex-start; /* Align to the left */
+  align-items: center;
+  padding: 20px 30px;
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
 }
 
-.title-bar img.icon {
-    width: 80px;
-    height: 80px;
+/* Adjust back button to be beside the icon */
+.title-content {
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Small gap between the back button and icon */
 }
-/* Wrapper to center the container under the title bar */
+
+.back-button {
+  font-size: 20px; /* Adjusted size for better visibility */
+  cursor: pointer;
+  color: white;
+  margin-left: 10px; /* Space between button and icon */
+  background: none;
+}
+
+.title-bar i {
+  font-size: 2.5rem;
+  color: #fff;
+}
+
+/* Layout container */
 .page-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 100px); /* Adjust based on title-bar height */
-    padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 100px);
+  padding: 20px;
 }
 
-/* Container for both sides */
 .container {
-    display: flex;
-    flex-direction: row;
-    width: 80%;
-    max-width: 1200px;
-    height: 70vh;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  width: 80%;
+  max-width: 1100px;
+  height: 70vh;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Left side - Sign up promo */
+/* Welcome section */
 .welcome-section {
-    flex: 1;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
 }
 
 .welcome-section h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    color: #222;
+  font-size: 2.5rem;
+  color: #222;
 }
 
 .welcome-section p {
-    font-size: 1rem;
-    margin: 5px 0;
-    text-align: center;
+  margin: 10px 0;
+  text-align: center;
 }
 
 .welcome-section .btn {
-    margin-top: 20px;
-    padding: 10px 30px;
-    font-size: 1rem;
-    background-color: transparent;
-    border: 2px solid #333;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #333;
+  margin-top: 20px;
+  padding: 10px 30px;
+  background: transparent;
+  border: 2px solid #333;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #333;
 }
 
 .welcome-section .btn:hover {
-    background-color: #DFCAA0;
+  background-color: #DFCAA0;
 }
 
-/* Right side - Login form */
+/* Login section */
 .login-section {
-    flex: 1;
-    background-color: rgba(255, 255, 255, 0.85);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
 }
 
 .login-section h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
 form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
 }
 
 label {
-    margin-bottom: 5px;
-    font-weight: bold;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 input {
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-input::placeholder {
-    font-style: italic;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
-    padding: 10px;
-    background-color: #DFCAA0;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
+  padding: 10px;
+  background-color: #DFCAA0;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #004d40;
-    color: white;
+  background-color: #004d40;
+  color: white;
 }
 
 .login-section a {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #333;
-    text-decoration: none;
-    text-align: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #333;
+  text-decoration: none;
 }
 
-/* Responsive Design for Mobile */
+/* Flash messages */
+.flash-message {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.flash-message.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.flash-message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        height: auto;
-        width: 90%;
-    }
+  .container {
+    flex-direction: column;
+    height: auto;
+  }
 
-    .welcome-section, .login-section {
-        flex: none;
-        width: 100%;
-        height: auto;
-    }
+  .title-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .welcome-section h1 {
-        font-size: 2rem;
-    }
+  .portal-title {
+    font-size: 20px;
+    margin-top: 10px;
+  }
 
-    .login-section h1 {
-        font-size: 1.5rem;
-    }
-
-    .btn, button {
-        font-size: 1rem;
-        padding: 10px 20px;
-    }
+  .back-button {
+    font-size: 20px;
+  }
 }

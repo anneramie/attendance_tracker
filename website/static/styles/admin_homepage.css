@@ -110,3 +110,8 @@ body {
 .btn-logout:hover {
     background-color: #a93226;
 }
+.overlay i {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-right: 10px;
+}

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, flash, request, url_for, session, jsonify
+from flask import Blueprint, render_template, redirect, flash, request, url_for, session, jsonify, make_response
 from werkzeug.security import check_password_hash
 from website.models import Admin,Professor, Student,Section,AttendanceSheet,ProfRequest,SectionAccessRequest
 from .extensions import db, bcrypt
@@ -7,6 +7,17 @@ from .extensions import db
 import random
 import string
 from . import auth
+import pdfkit
+from flask import Response
+import pdfkit
+from io import BytesIO
+from flask import send_file
+
+
+
+path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'  # Adjust if needed
+pdf_config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
 
 
 
@@ -156,51 +167,7 @@ def section_list():
 
 
 
-@auth.route('/attendance/<int:section_id>', methods=['GET', 'POST'])
-def show_attendance_sheet(section_id):
-    students = Student.query.filter_by(section_id=section_id).all()
 
-    if request.method == 'POST':
-        data = request.json
-        if 'attendance' not in data or not isinstance(data['attendance'], list):
-            return jsonify({'message': 'Invalid data format!'}), 400
-
-        try:
-            for entry in data['attendance']:
-                student_id = entry.get('student_id')
-                day = entry.get('day')
-                status = entry.get('status')
-
-                # Convert ✔ and ✖ to P, A, E
-                if status == '✔':
-                    status = 'P'
-                elif status == '✖':
-                    is_excused = entry.get('is_excused', False)
-                    status = 'E' if is_excused else 'A'
-
-                if status not in ['P', 'A', 'E']:
-                    continue
-
-                record = AttendanceSheet.query.filter_by(student_id=student_id, day=day).first()
-                if record:
-                    record.status = status
-                else:
-                    db.session.add(AttendanceSheet(student_id=student_id, day=day, status=status))
-
-            db.session.commit()
-            return jsonify({'message': 'Attendance saved successfully!'})
-        
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({'message': f'Error saving attendance: {e}'}), 500
-
-    # Load attendance data for GET requests
-    attendance_data = {
-        (a.student_id, a.day): a.status
-        for a in AttendanceSheet.query.join(Student).filter(Student.section_id == section_id).all()
-    }
-
-    return render_template('attendance_sheet.html', students=students, attendance_data=attendance_data)
 
 
 
@@ -267,18 +234,6 @@ def generate_random_password(length=10):
     characters = string.ascii_letters + string.digits  # A-Z, a-z, 0-9
     return ''.join(random.choice(characters) for _ in range(length))
 
-def send_credentials_to_professor(professor_email, username, password):
-    msg = Message(
-        subject="Your Professor Account Credentials",
-        recipients=[professor_email],
-        body=f"Hello, \n\nYour professor account has been created. \n\n"
-            f"Username: {username}\nPassword: {password}\n\nPlease log in at your earliest convenience.\n\n"
-            "Best regards,\nAdmin"
-    )
-    try:
-        mail.send(msg)
-    except Exception as e:
-        print(f"Error sending email: {e}")
 
 
 
@@ -382,13 +337,10 @@ def section_access_requests():
 def approve_access(request_id):
     req = SectionAccessRequest.query.get_or_404(request_id)
     req.status = 'approved'
-    # Add professor to section
-    professor = Professor.query.get(req.professor_id)
-    section = Section.query.get(req.section_id)
-    section.professors.append(professor)
     db.session.commit()
     flash('Access request approved.', 'success')
     return redirect(url_for('auth.section_access_requests'))
+
 
 
 @auth.route('/reject_access/<int:request_id>', methods=['POST'])
@@ -463,20 +415,6 @@ def professor_logout():
     return render_template('logout.html')  # Just a placeholder for GET requests
 from flask_mail import Message
 
-def send_credentials_to_professor(email, username, password):
-    msg = Message(
-        subject="Your Professor Account Credentials",
-        recipients=[email],
-        body=f"Hello, \n\nYour professor account has been created. \n\n"
-             f"Username: {username}\nPassword: {password}\n\n"
-             "Please log in at your earliest convenience.\n\n"
-             "Best regards,\nAdmin"
-    )
-    try:
-        mail.send(msg)  # Try sending the email
-        print(f"Email sent to {email}")  # Log that the email was sent
-    except Exception as e:
-        print(f"Error sending email to {email}: {e}")  # Log the error if something goes wrong
 
 
 
@@ -501,8 +439,6 @@ def generate(prof_request_id):
     # Commit the transaction to save changes
     db.session.commit()
 
-    # Send the credentials to the professor's email after saving to the database
-    send_credentials_to_professor(prof_request.email, username, raw_password)
 
     # Render the template to show the generated credentials
     return render_template('generate.html', 
@@ -513,15 +449,97 @@ def generate(prof_request_id):
 
 
 
-@auth.route('/view_attendance/<int:section_id>', methods=['GET'])
-def view_final_attendance(section_id):
+
+
+
+
+
+
+@auth.route('/attendance/<int:section_id>', methods=['GET', 'POST'])
+def show_attendance_sheet(section_id):
+    from flask import current_app as app
+
+    professor_id = session.get('professor_id')
+    if not professor_id:
+        flash("Please log in as a professor to access attendance.", "danger")
+        return redirect(url_for('auth.prof_login'))
+
+    # Check access to section
+    access = SectionAccessRequest.query.filter_by(
+        professor_id=professor_id,
+        section_id=section_id,
+        status='approved'
+    ).first()
+
+    if not access:
+        flash("You do not have access to this section's attendance sheet.", "danger")
+        return redirect(url_for('auth.sections_handled'))
+
+    students = Student.query.filter_by(section_id=section_id).all()
+    section = Section.query.get_or_404(section_id)
+
+    if request.method == 'POST':
+        data = request.get_json()
+        if not data or 'attendance' not in data or not isinstance(data['attendance'], list):
+            return jsonify({'message': 'Invalid data format!'}), 400
+
+        try:
+            for entry in data['attendance']:
+                student_id = entry.get('student_id')
+                day = entry.get('day')
+                status = entry.get('status')
+
+                if not student_id or not day or status not in ['P', 'A', 'E']:
+                    continue
+
+                # Check if record exists for this professor
+                record = AttendanceSheet.query.filter_by(
+                    student_id=student_id,
+                    day=day,
+                    professor_id=professor_id  # ✅ important
+                ).first()
+
+                if record:
+                    record.status = status
+                else:
+                    new_record = AttendanceSheet(
+                        student_id=student_id,
+                        day=day,
+                        status=status,
+                        professor_id=professor_id  # ✅ store who took it
+                    )
+                    db.session.add(new_record)
+
+            db.session.commit()
+            return jsonify({'message': 'Attendance saved successfully!'}), 200
+
+        except Exception as e:
+            db.session.rollback()
+            app.logger.error(f"Error saving attendance: {e}")
+            return jsonify({'message': f"Error saving attendance: {e}"}), 500
+
+    # GET: Load attendance per professor only
+    attendance_data = {
+        (a.student_id, a.day): a.status
+        for a in AttendanceSheet.query.join(Student)
+        .filter(Student.section_id == section_id, AttendanceSheet.professor_id == professor_id)
+        .all()
+    }
+
+    return render_template(
+        'attendance_sheet.html',
+        section_id=section_id,
+        section_name=section.name,
+        students=students,
+        attendance_data=attendance_data
+    )
+@auth.route('/download_attendance/<int:section_id>', methods=['GET'])
+def download_attendance(section_id):
     # Get all students in the section
     students = Student.query.filter_by(section_id=section_id).all()
-
-    # Load attendance records for the section
     attendance_records = AttendanceSheet.query.join(Student).filter(Student.section_id == section_id).all()
 
-    # Build a nested dict: {student_id: {day: status}}
+    # Organize attendance data
     attendance_data = {}
     all_days = set()
 
@@ -529,19 +547,110 @@ def view_final_attendance(section_id):
         sid = record.student_id
         day = record.day
         status = record.status
-
         all_days.add(day)
         if sid not in attendance_data:
             attendance_data[sid] = {}
         attendance_data[sid][day] = status
 
+    # Ensure all students have an entry, even if empty
+    for student in students:
+        attendance_data.setdefault(student.id, {})
+
+    # Sort the days
     sorted_days = sorted(all_days)
 
-    return render_template(
-        'view_attendance.html',
+    # Compute present counts
+    present_counts = {
+        sid: sum(1 for status in days.values() if status == 'P')
+        for sid, days in attendance_data.items()
+    }
+
+    # Get professor (optional)
+    professor_id = session.get('professor_id')
+    professor = Professor.query.get(professor_id) if professor_id else None
+
+    # Render template
+    rendered = render_template(
+        'attendance_pdf.html',
         students=students,
         attendance_data=attendance_data,
         days=sorted_days,
-        section_id=section_id
+        section_id=section_id,
+        professor=professor,
+        present_counts=present_counts  # ✅ REQUIRED
     )
-    
+
+    # PDF generation
+    config = pdfkit.configuration(wkhtmltopdf=r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe')
+    pdf = pdfkit.from_string(rendered, False, configuration=config)
+
+    # Return PDF as response
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = f'attachment; filename=attendance_section_{section_id}.pdf'
+    return response
+@auth.route('/view_final_attendance/<int:section_id>', methods=['GET'])
+def view_final_attendance(section_id):
+    professor_id = session.get('professor_id')
+    admin_id = session.get('admin_id')
+
+    if not professor_id and not admin_id:
+        flash("You must be logged in to view attendance.", "danger")
+        return redirect(url_for('auth.prof_login'))
+
+    students = Student.query.filter_by(section_id=section_id).all()
+
+    if admin_id:
+        attendance_records = (
+            AttendanceSheet.query
+            .join(Student)
+            .filter(Student.section_id == section_id)
+            .all()
+        )
+    else:
+        access = SectionAccessRequest.query.filter_by(
+            professor_id=professor_id,
+            section_id=section_id,
+            status='approved'
+        ).first()
+
+        if not access:
+            flash("You do not have access to view this section's attendance.", "danger")
+            return redirect(url_for('auth.sections_handled'))
+
+        attendance_records = (
+            AttendanceSheet.query
+            .join(Student)
+            .filter(
+                Student.section_id == section_id,
+                AttendanceSheet.professor_id == professor_id
+            )
+            .all()
+        )
+
+    attendance_by_prof = {}
+    all_days = set()
+
+    for record in attendance_records:
+        sid = record.student_id
+        day = record.day
+        status = record.status
+        prof = Professor.query.get(record.professor_id)
+        prof_name = prof.username if prof else "Unknown"  # Changed to prof.username
+
+        if prof_name not in attendance_by_prof:
+            attendance_by_prof[prof_name] = {}
+
+        if sid not in attendance_by_prof[prof_name]:
+            attendance_by_prof[prof_name][sid] = {}
+
+        attendance_by_prof[prof_name][sid][day] = status
+        all_days.add(day)
+
+    return render_template(
+    'view_attendance.html', 
+    students=students, 
+    attendance_by_prof=attendance_by_prof, 
+    all_days=sorted(all_days),
+    section_id=section_id  # Make sure to pass section_id here
+)

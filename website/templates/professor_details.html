@@ -4,12 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professor Details</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/professor_details.css') }}" />
+    <!-- FontAwesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset and Base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Segoe UI', sans-serif;
+            background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            height: 15vh;
+        }
+
+        .title-bar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .title-bar .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .title-bar .buttons button {
+            background: none;
+            color: #fff;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 2.5rem;
+        }
+
+        .title-bar .buttons button:hover {
+            background-color: #e6e6e6;
+            color: black;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 30px;
+        }
+
+        .header {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333;
+        }
+
+        .professor-details {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .professor-details p {
+            margin: 10px 0;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .button-group button {
+            background: none;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: rgba(0, 0, 0, 0.6);
+            transition: background-color 0.3s ease;
+        }
+
+        .button-group button:hover {
+            background-color: #e6e6e6;
+            color: #000;
+        }
+
+        .button-group a {
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Title Bar -->
+    <div class="title-bar">
+        <h1>Professor Details</h1>
+        <div class="buttons">
+            <button onclick="history.back()">
+                <i class="fa-solid fa-circle-left"></i>
+            </button>
+            <button onclick="location.href='{{ url_for('views.admin_homepage') }}'">
+                <i class="fas fa-home"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
     <div class="container">
         <div class="header">
-            <span>Professor Details</span>
+            <span>Professor Info</span>
         </div>
 
         <div class="professor-details">
@@ -17,12 +149,14 @@
             <p><strong>Email:</strong> {{ professor.email }}</p>
         </div>
         
-        <div>
-            <a href="{{ url_for('auth.generate', prof_request_id=professor.id) }}"><button class="btn">Accept</button></a>
+        <div class="button-group">
+            <a href="{{ url_for('auth.generate', prof_request_id=professor.id) }}">
+                <button><i class="fas fa-check-circle"></i> Accept</button>
+            </a>
 
-            <a href="{{ url_for('views.admin_homepage') }}"><button class="btn">Home</button></a>
-            <a href="{{ url_for('auth.admin_request_list') }}"><button class="btn">Back</button></a>
+            </a>
         </div>
-        
+    </div>
+
 </body>
 </html>

@@ -1,172 +1,120 @@
-body {
+/* Basic Reset */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+body {
     font-family: Arial, sans-serif;
-    background: url("/static/images/bg.jpg") no-repeat center center fixed;
-    background-size: cover;
-    min-height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px;
 }
 
-.title-bar {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 30px;
-    background: rgba(0, 0, 0, 0.2);
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    justify-content: center;
-    height:5vh;
-}
-
-.title-bar img.icon {
-    width: 80px;
-    height: 80px;
-}
-/* Wrapper to center the container under the title bar */
-.page-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 100px); /* Adjust based on title-bar height */
-    padding: 20px 0;
-}
-
-/* Container for both sides */
+/* Container */
 .container {
-    display: flex;
-    flex-direction: row;
-    width: 80%;
-    max-width: 1200px;
-    height: 70vh;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Left side - Sign up promo */
-.welcome-section {
-    flex: 1;
-    background-color: rgba(255, 255, 255, 0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-}
-
-.welcome-section h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
-    color: #222;
-}
-
-.welcome-section p {
-    font-size: 1rem;
-    margin: 5px 0;
-    text-align: center;
-}
-
-.welcome-section .btn {
-    margin-top: 20px;
-    padding: 10px 30px;
-    font-size: 1rem;
-    background-color: transparent;
-    border: 2px solid #333;
-    border-radius: 6px;
-    cursor: pointer;
-    color: #333;
-}
-
-.welcome-section .btn:hover {
-    background-color: #DFCAA0;
-}
-
-/* Right side - Login form */
-.login-section {
-    flex: 1;
-    background-color: rgba(255, 255, 255, 0.85);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-}
-
-.login-section h1 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
     width: 100%;
-    max-width: 350px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-input {
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-input::placeholder {
-    font-style: italic;
-}
-
-button {
-    padding: 10px;
-    background-color: #DFCAA0;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #004d40;
-    color: white;
-}
-
-.login-section a {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #333;
-    text-decoration: none;
+/* Header */
+.header {
     text-align: center;
+    margin-bottom: 30px;
+    background-color: #333;
+    color: white;
+    padding: 15px;
+    font-size: 24px;
+    border-radius: 8px;
 }
 
-/* Responsive Design for Mobile */
+/* Request List */
+.request-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.request-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    border-radius: 8px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.request-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Approve Button */
+.request-button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.request-button:hover {
+    background-color: #3d3d3d;
+}
+
+.request-button:active {
+    background-color: #1e7e34;
+}
+
+/* Back Button */
+.btn {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn:active {
+    background-color: #004085;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        flex-direction: column;
-        height: auto;
-        width: 90%;
+        padding: 15px;
     }
 
-    .welcome-section, .login-section {
-        flex: none;
-        width: 100%;
-        height: auto;
+    .request-btn {
+        font-size: 16px;
     }
 
-    .welcome-section h1 {
-        font-size: 2rem;
+    .request-button {
+        font-size: 14px;
     }
 
-    .login-section h1 {
-        font-size: 1.5rem;
-    }
-
-    .btn, button {
-        font-size: 1rem;
-        padding: 10px 20px;
+    .btn {
+        font-size: 16px;
     }
 }

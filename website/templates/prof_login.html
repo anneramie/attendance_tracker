@@ -5,30 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professor Login</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/prof_login.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <!-- Title Bar -->
     <div class="title-bar">
-        <img class="icon" src="{{ url_for('static', filename='images/at_logo.jpg') }}" alt="Logo">
-        Professor Portal
+        <!-- Back Button on the left -->
+        <button class="back-button" onclick="window.location.href='/'">
+            <i class="fa-solid fa-circle-left"></i>
+        </button>
+
+        <!-- Title and Icon on the right -->
+        <div class="title-content">
+            <i class="fa-solid fa-clipboard-user icon"></i>
+            <span>Professor Portal</span>
+        </div>
     </div>
 
     <div class="page-wrapper">
         <div class="container">
+            <!-- Welcome Section -->
             <div class="welcome-section">
                 <h1>Welcome!</h1>
                 <p>If you don’t have an account yet, you can sign up now.</p>
                 <a href="{{ url_for('auth.prof_request') }}"><button class="btn">Sign Up</button></a>
             </div>
 
+            <!-- Login Section -->
             <div class="login-section">
                 <h1>Professor Login</h1>
 
                 {% with messages = get_flashed_messages(with_categories=True) %}
-                  {% if messages %}
-                    {% for category, message in messages %}
-                      <div class="flash-message {{ category }}">{{ message }}</div>
-                    {% endfor %}
-                  {% endif %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
                 {% endwith %}
 
                 <form method="POST" action="{{ url_for('auth.prof_login') }}">

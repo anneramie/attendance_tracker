@@ -1,79 +1,117 @@
+/* Full background setup */
 body {
-    width: 100%;
-    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
     background: url("../images/bg.jpg") no-repeat center center fixed;
     background-size: cover;
-    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Top bar */
+.title-bar {
+    width: 95%;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 30px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Title group */
+.title-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.title-left h1 {
+    margin: 0;
+}
+
+.title-left i.icon {
+    font-size: 3rem;
+}
+
+/* Right-aligned buttons */
+.button-group {
+    display: flex;
+    gap: 10px;
+    
+}
+
+/* Button styling for Home & Back */
+.btn.icon-only {
+    background: none;
+    color: white;
+    border: none;
+    font-size: 2.5rem;
+    padding:0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.3s ease;
+}
+
+.btn.icon-only:hover {
+    color: #00ffcc;
+}
+
+/* General layout */
+.overlay {
     display: flex;
     justify-content: center;
     padding: 40px 20px;
 }
 
-/* Main Container */
-.title-bar {
-    display: flex;
-    align-items: center;
-    padding: 30px;
-    background: rgba(0, 0, 0, 0.2);
-    color: #fff;
-    font-size: 2rem;
-    font-weight: bold;
-    justify-content: flex-start; /* Align to the left */
-    height: 5vh;
-}
-
-/* Back button with an image */
-.back-button {
-    padding: 0;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-    margin-left: 10px; /* Add space between button and logo */
-}
-
-.back-img {
-    width: 30px;  /* Adjust the size of the back button image */
-    height: 30px;
-}
-
-.title-bar img.icon {
-    width: 80px;
-    height: 80px;
-}
-
-h1 {
-    margin-left: 10px; /* Add space between logo and title */
-}
+/* Section box */
 .container {
     background-color: #fffde7;
-    padding: 20px;
+    padding: 30px;
     border-radius: 10px;
-    max-width: 100%;
-    margin: auto;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    max-width: 1000px;
+    width: 100%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
-h2 {
-    text-align: center;
-}
+
+/* Input fields and buttons */
 input, button {
     margin: 5px;
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
+
+/* Table styling */
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 10px;
 }
+
 th, td {
     border: 1px solid #000;
     padding: 8px;
     text-align: center;
 }
+
+/* Action buttons (not top bar) */
 .btn {
-    background-color: #008060;
+    background-color: #5d5d5d;
     color: white;
     cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+h2, h3 {
+    text-align: center;
 }

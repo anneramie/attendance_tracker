@@ -4,17 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_create_account.css') }}">
   </head>
   <body>
     <!-- Title Bar -->
+    <!-- Title Bar -->
     <div class="title-bar">
       <button class="back-button" onclick="history.back()">
-        <img src="{{ url_for('static', filename='images/back.png') }}" alt="Back" class="back-img" />
+        <i class="fa-solid fa-circle-left"></i>
       </button>
-      <img src="{{ url_for('static', filename='images/icon.png') }}" alt="Logo" class="icon" />
+      <i class="fa-solid fa-clipboard-user icon"></i>
       <h1>Create Admin Account</h1>
     </div>
+
 
     <!-- Page Wrapper -->
     <div class="page-wrapper">
@@ -22,10 +25,10 @@
         
         <!-- LEFT SIDE: WELCOME SECTION -->
         <div class="welcome-section">
-          <h1><span>NEW</span><br /><span>HERE?</span></h1>
+          <h1><span>NEW HERE?</span></h1>
           <p>Track attendance effortlessly.</p>
           <p>Sign up now!</p>
-          <a href="{{ url_for('auth.signup') }}" class="btn">Sign up</a>
+
         </div>
 
         <!-- RIGHT SIDE: CREATE ACCOUNT FORM -->

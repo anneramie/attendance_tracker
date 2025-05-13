@@ -13,22 +13,39 @@
             color: white;
         }
 
+        /* Title Bar Container */
         .title-bar {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
             padding: 30px;
             background: rgba(0, 0, 0, 0.2);
             color: #fff;
-            font-size: 1rem;
-            font-weight: bold;
-            justify-content: left;
-            height: 15vh;
         }
 
-        .title-bar img.icon {
-            width: 40px;
-            height: 40px;
+        /* Left side: icon + title */
+        .title-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-left i.icon {
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .title-left h1 {
+            font-size: 1.8rem;
+            margin: 0;
+        }
+
+        .title-bar button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 2rem;
         }
 
         .container {
@@ -36,8 +53,18 @@
             padding: 30px;
         }
 
-        #professors {
+        .professors-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
             width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #professors {
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -69,40 +96,71 @@
             width: 100%;
             max-width: 800px;
             box-sizing: border-box;
-            max-height: 400px;  /* Optional: Limit the height */
-            overflow-y: auto;   /* Enable vertical scrolling if content exceeds max height */
+            max-height: 400px;
+            overflow-y: auto;
         }
 
         #info-box h2, #info-box p, #info-box li {
             color: black;
-            font-size: 1rem;    /* Optional: Adjust font size if too large */
-            line-height: 1.5;    /* Optional: Adjust line spacing for readability */
+            font-size: 1rem;
+            line-height: 1.5;
         }
 
         .section-list {
             margin-top: 10px;
         }
+
+        @media (max-width: 768px) {
+            .title-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+            }
+
+            .container {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .professors-container {
+                width: 100%;
+            }
+
+            #info-box {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+
+            .title-left h1 {
+                font-size: 1.5rem;
+            }
+
+            .title-left i.icon {
+                font-size: 2.5rem;
+            }
+        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
     <div class="title-bar">
-        <img src="/static/images/at_logo.jpg" alt="Logo" class="icon">
-        <h1>Professors List</h1>
-    </div>
-
-    <!-- Back Button Using Image -->
-    <div style="padding: 10px 30px;">
-        <button onclick="history.back()" style="background: none; border: none; cursor: pointer;">
-            <img src="/static/images/back.jpg" alt="Back" style="height: 30px;">
+        <div class="title-left">
+            <i class="fa-solid fa-chalkboard-teacher icon"></i>
+            <h1>Professors List</h1>
+        </div>
+        <button onclick="history.back()">
+            <i class="fa-solid fa-circle-left"></i>
         </button>
     </div>
 
     <div class="container">
-        <div id="professors">
-            {% for prof in professors %}
-                <button class="professor-btn" onclick="fetchProfessorInfo({{ prof.id }})">{{ prof.username }}</button>
-            {% endfor %}
+        <div class="professors-container">
+            <div id="professors">
+                {% for prof in professors %}
+                    <button class="professor-btn" onclick="fetchProfessorInfo({{ prof.id }})">{{ prof.username }}</button>
+                {% endfor %}
+            </div>
         </div>
 
         <div id="info-box" style="display: none;">

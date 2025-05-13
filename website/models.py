@@ -38,14 +38,17 @@ class AttendanceSheet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.Integer, nullable=False)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
+    professor_id = db.Column(db.Integer, db.ForeignKey('professor.id'), nullable=False)  # ✅ Add this line
     status = db.Column(
         db.Enum('P', 'A', 'E', name='attendance_status'), nullable=False
-    )  # Enum for clarity and constraints
+    )
 
     student = db.relationship('Student', backref='attendance_records')
+    professor = db.relationship('Professor', backref='attendance_sheets')  # ✅ Optional, for easy access
 
     def __repr__(self):
-        return f"<Attendance {self.student.name} - Day {self.day}: {self.status}>"
+        return f"<Attendance {self.student.name} - Day {self.day} by Prof {self.professor_id}: {self.status}>"
+
 class ProfRequest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     professor_name = db.Column(db.String(100), nullable=False)

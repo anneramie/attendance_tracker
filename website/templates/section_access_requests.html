@@ -3,124 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Section Access Requests</title>
+    <title>Professor Requests</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="container">
+        <!-- Title Bar with Logo and Icons -->
+        <div class="title-bar">
+            <!-- Professor Icon instead of back button -->
+            <i class="fa-solid fa-chalkboard-teacher icon"></i>
+
+            <!-- Title "Professor Requests" beside the professor icon -->
+            <h1 class="title-text">Professor Requests</h1>
+
+            <!-- Back Button moved to the right -->
+            <button onclick="window.history.back()" class="back-button">
+                <i class="fa-solid fa-circle-left"></i>
+            </button>
+        </div>
+
+        <div class="section-list">
+            {% for request in requests %}
+                <div class="section-btn">
+                    {{ request.professor.username }} is requesting access to {{ request.section.name }}
+
+                    <form action="{{ url_for('auth.approve_access', request_id=request.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Approve</button>
+                    </form>
+
+                    <form action="{{ url_for('auth.reject_access', request_id=request.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Reject</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
     <style>
-        /* General body styles */
-        
-        body {
-            font-family: Arial, sans-serif;
+        body, html {
             margin: 0;
             padding: 0;
-            background: url("{{ url_for('static', filename='images/bg.jpg') }}") no-repeat center center fixed;
-
+            font-family: Arial, sans-serif;
+            background: url("/static/images/bg.jpg") no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-}
-
-
-        /* Container styling */
-        .container {
-            width: 100%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Header styling */
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        /* Table styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        /* Table header styling */
-        thead {
-            background-color: #333;
             color: white;
         }
 
-        th, td {
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ddd;
-        }
-
-        /* Action button container */
-        .action-buttons {
+        .title-bar {
             display: flex;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between; /* Space between elements */
+            gap: 10px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+            height: 15vh;
         }
 
-        /* Button styles */
-        button {
-            padding: 8px 16px;
-            font-size: 14px;
-            cursor: pointer;
+        .back-button {
+            background: none;
             border: none;
+            cursor: pointer;
+            font-size: 40px; /* Size of the back icon */
+            color: white;
+        }
+
+        .title-text {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            flex-grow: 1; /* Ensures the title text is centered */
+        }
+
+        .icon {
+            font-size: 40px; /* Size of the professor icon */
+            color: white;
+        }
+
+        .section-btn {
+            display: block;
+            padding: 10px;
+            margin: 10px 0;
+            text-decoration: none;
+            background-color: #5d5d5d;
+            color: white;
+            font-size: 1rem;
             border-radius: 5px;
-            margin: 0 5px;
+            text-align: left;
             transition: background-color 0.3s;
         }
 
-        .approve-btn {
-            background-color: #28a745;
-            color: white;
+        .section-btn:hover {
+            background-color: #3d3d3d;
         }
 
-        .approve-btn:hover {
-            background-color: #218838;
-        }
-
-        .reject-btn {
-            background-color: #dc3545;
-            color: white;
-        }
-
-        .reject-btn:hover {
-            background-color: #c82333;
+        .section-list {
+            padding: 20px;
         }
     </style>
-</head>
-<body>
-
-    <div class="container">
-        <h2>Pending Section Access Requests</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Professor ID</th>
-                    <th>Section ID</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for req in requests %}
-                <tr>
-                    <td>{{ req.professor_id }}</td>
-                    <td>{{ req.section_id }}</td>
-                    <td class="action-buttons">
-                        <form action="{{ url_for('auth.approve_access', request_id=req.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="approve-btn">Approve</button>
-                        </form>
-                        <form action="{{ url_for('auth.reject_access', request_id=req.id) }}" method="POST" style="display:inline;">
-                            <button type="submit" class="reject-btn">Reject</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 
 </body>
 </html>

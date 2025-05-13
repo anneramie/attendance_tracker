@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sections Handled</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body, html {
       height: 100%;
@@ -24,7 +25,7 @@
       color: #fff;
       font-size: 1rem;
       font-weight: bold;
-      height: 10vh;
+      height: 5vh;
     }
 
     .title-left {
@@ -33,21 +34,22 @@
       gap: 10px;
     }
 
-    .title-bar img.icon {
-      width: 40px;
-      height: 40px;
-      object-fit: cover;
-      border-radius: 8px;
+    .title-bar i {
+      font-size: 40px;
+      color: white;
+      font-size: 2.5rem;
     }
 
     .title-bar .home-btn {
       padding: 10px 20px;
       background-color: #ffffff;
-      color: #000;
+      color: #fff;
       border-radius: 8px;
       text-decoration: none;
       font-weight: bold;
       transition: background 0.3s, color 0.3s;
+      background: none;
+      font-size: 2.5rem;
     }
 
     .title-bar .home-btn:hover {
@@ -82,18 +84,18 @@
 
     button {
       width: 100%;
-      height: 60px;
+      height: 30px;
       font-size: 1.1rem;
       border: none;
       border-radius: 8px;
-      background-color: #333;
+      background-color: #5d5d5d;
       color: white;
       cursor: pointer;
       transition: background 0.3s;
     }
 
     button:hover {
-      background-color: #45a049;
+      background-color: #3d3d3d;
     }
 
     p {
@@ -105,10 +107,14 @@
 <body>
   <div class="title-bar">
     <div class="title-left">
-      <img src="/static/images/at_logo.jpg" alt="Logo" class="icon" />
+      <!-- FontAwesome Logo Icon -->
+      <i class="fa-solid fa-clipboard-list icon"></i>
       <h1>Sections Handled</h1>
     </div>
-    <a href="{{ url_for('views.prof_homepage') }}" class="home-btn">Home</a>
+    <a href="{{ url_for('views.prof_homepage') }}" class="home-btn">
+      <!-- FontAwesome Home Icon -->
+      <i class="fa-solid fa-house"></i>
+    </a>
   </div>
 
   <div class="container">

@@ -15,7 +15,7 @@ body {
     padding: 30px;
     background: rgba(0, 0, 0, 0.2);
     color: #fff;
-    font-size: 2rem;
+    font-size: 1rem;
     font-weight: bold;
     justify-content: flex-start; /* Align to the left */
     height: 5vh;
@@ -193,4 +193,14 @@ button:hover {
         font-size: 1rem;
         padding: 10px 20px;
     }
+}
+.back-button i {
+  font-size: 30px; /* adjust size as needed */
+  color: #fff; /* or any color you prefer */
+}
+.icon {
+  font-size: 50px; /* or whatever size you need */
+  color: #fff; /* customize the color */
+  margin-right: 10px; 
+  /* space between icon and text */
 }

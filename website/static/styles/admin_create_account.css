@@ -14,7 +14,7 @@ body {
     padding: 10px 20px;
     background: rgba(0, 0, 0, 0.2);
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1rem;
     font-weight: bold;
     justify-content: flex-start;
     height: 80px;
@@ -28,15 +28,7 @@ body {
     padding: 0;
 }
 
-.back-img {
-    width: 30px;
-    height: 30px;
-}
 
-.title-bar img.icon {
-    width: 60px;
-    height: 60px;
-}
 
 .title-bar h1 {
     margin-left: 10px;
@@ -215,4 +207,16 @@ button.btn:hover {
 
 .welcome-section .btn:hover {
     background-color: #DFCAA0;
+}
+.icon {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.back-button i {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #fff;
+    justify-items: center;
 }
